@@ -6,7 +6,8 @@ def acces_compte(id,mp):
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     id TEXT,
     mp TEXT,
-    data TEXT,
+    name TEXT,
+    age INTEGER,
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
