@@ -9,12 +9,13 @@ def acces_compte(demande):
     );""")
     if demande[0] == 0:
         cursor.execute("SELECT * FROM compte")
-        compte = cursor.fetchone()
+        compte = cursor.fetchall()
         index = 0
         while index < len(compte):
             if compte[index][1] == demande[1]:
-                break
+                if compte[index][2] == demande[2]
             index += 1
+        
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
