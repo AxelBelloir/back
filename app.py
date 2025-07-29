@@ -3,9 +3,9 @@ def acces_compte(demande):
     conn = sqlite3.connect("COMPTE")
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS compte (
-    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    IDKEY INTEGER PRIMARY KEY AUTOINCREMENT,
     id TEXT,
-    mp TEXT,
+    mp TEXT
     );""")
     if demande[0] == 0:
         cursor.execute("SELECT * FROM compte")
