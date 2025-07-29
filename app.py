@@ -13,9 +13,12 @@ def acces_compte(demande):
         index = 0
         while index < len(compte):
             if compte[index][1] == demande[1]:
-                if compte[index][2] == demande[2]
+                if compte[index][2] == demande[2]:
+                    message = "Connexion reussi."
+                    return message
             index += 1
-        
+        message = "identifiant ou mot de passe incorecte."
+        return message
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
