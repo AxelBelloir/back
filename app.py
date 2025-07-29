@@ -1,6 +1,6 @@
 def acces_compte(demande):
     import sqlite3
-    conn = sqlite3.connect("COMPTE")
+    conn = sqlite3.connect("COMPTE.db")
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS compte (
     IDKEY INTEGER PRIMARY KEY AUTOINCREMENT,
