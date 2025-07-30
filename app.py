@@ -22,6 +22,19 @@ def acces_compte(demande):
     elif demande[0] == 1:
         cursor.execute("SELECT * FROM compte")
         compte = cursor.fetchall()
+        index = 0
+        out = False
+        while index < len(compte):
+            if demande[1] == compte[index][1]:
+                out = True
+                break
+            index += 1
+        if out == False:
+            cursor.execute("INSERT INTO compte (id,mp) VALUES (?,?)",(demande[1],demande[2]))
+            return "Compte creer"
+        else:
+            return "Cette identifiant est deja utilisée."
+            
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
