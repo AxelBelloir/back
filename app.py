@@ -26,6 +26,7 @@ def acces_compte(demande):
     elif demande[0] == 1:
         cursor.execute("SELECT * FROM compte")
         compte = cursor.fetchall()
+        return compte
         index = 0
         out = False
         while index < len(compte):
