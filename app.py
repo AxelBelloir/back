@@ -17,8 +17,11 @@ def acces_compte(demande):
                     message = "Connexion reussi."
                     return message
             index += 1
-        message = "identifiant ou mot de passe incorecte."
+        message = "Identifiant ou mot-de-passe incorecte."
         return message
+    elif demande[0] == 1:
+        cursor.execute("SELECT * FROM compte")
+        compte = cursor.fetchall()
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -30,10 +33,10 @@ def greet():
     data = request.get_json()
     id = data.get('name', 'inconnu')
     mp = data.get('mp', 'inconnu')
-    action = 0
+    action = data.get('action', 'inconnu')
     demande = [action,id,mp]
     return_message = acces_compte(demande)
-    return jsonify({'message': f'Bonjour, {return_message}'})
+    return jsonify({'message': f'{return_message}'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
