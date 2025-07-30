@@ -20,9 +20,9 @@ def acces_compte(demande):
                     return message
             index += 1
         message = "Identifiant ou mot-de-passe incorecte."
-        return message
         conn.commit
         conn.close
+        return message
     elif demande[0] == 1:
         cursor.execute("SELECT * FROM compte")
         compte = cursor.fetchall()
@@ -34,14 +34,15 @@ def acces_compte(demande):
                 break
             index += 1
         if out == False:
+            conn.commit
+            conn.close
             cursor.execute("INSERT INTO compte (id,mp) VALUES (?,?)",(demande[1],demande[2]))
             return "Compte creer"
-            conn.commit
-            conn.close
         else:
-            return "Cette identifiant est deja utilisée."
             conn.commit
             conn.close
+            return "Cette identifiant est deja utilisée."
+            
             
 from flask import Flask, request, jsonify
 from flask_cors import CORS
