@@ -55,7 +55,13 @@ def acces_notes(demande):
         conn.commit
         conn.close
         return notes
+    if demande[0] = 1:
+        cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef) VALUES (?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5]))
+        conn.commit
+        conn.close
+        return "notes ajoutée."
     
+        
 def calcul_moyenne(notes):
     index = 0
     matieres = [
