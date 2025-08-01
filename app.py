@@ -95,7 +95,9 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)  # Important pour autoriser ton frontend à appeler l'API
-
+@app.route('/api/notes', methods=['POST'])
+def notes():
+    data = request.get_json()
 @app.route('/api/greet', methods=['POST'])
 def greet():
     data = request.get_json()
