@@ -1,6 +1,7 @@
 def acces_compte(demande):
     import sqlite3
-    conn = sqlite3.connect("COMPTE.db")
+    import random
+    conn = sqlite3.connect("DONNEE.db")
     cursor = conn.cursor()
     
     cursor.execute("""
@@ -36,6 +37,25 @@ def acces_compte(demande):
             conn.commit()
             conn.close()
             return "Compte créé."
+def acces_notes(demande):
+    conn = sqlite3.connect("DONNEE.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS notes(
+        idkey INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT,
+        matiere TEXT,
+        note FLOAT,
+        sur FLOAT,
+        coef FLOAT
+    );""")
+    if demande[0] = 0:
+        cursor.execute("SELECT * FROM notes WHERE id = ?",(demande[1],))
+        notes = cursor.fetchall()
+        conn.commit
+        conn.close
+        return notes
+    
 def calcul_moyenne(notes):
     index = 0
     matieres = [
