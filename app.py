@@ -36,7 +36,30 @@ def acces_compte(demande):
             conn.commit()
             conn.close()
             return "Compte créé."
-
+def calcul_moyenne(notes):
+    index = 0
+    matieres = [
+        ["Francais",], #francais
+        [
+            "Anglais",["CE",],["CO",],["EE",],["EOI",],["EOC",] #anglais
+        ],
+        [
+            "Espagnole",["CE",],["CO",],["EE",],["EOI",],["EOC",] #espagnole
+        ],
+        ["Histoire",], #Histoire
+        ["Mathematiques",], #Mathematiques
+        ["Phisique",], #Phisique
+        ["SVT",], #SVT
+        ["Techno",], #Techno
+        ["Arts",], #Arts
+        ["Musique",], #Musique
+        ["Sport",], #Sport
+        ["Latin",], #Latin
+        
+    ]
+    while index < len(matieres):
+        index1 = 0
+        while index1 < len(notes):
             
 from flask import Flask, request, jsonify
 from flask_cors import CORS
