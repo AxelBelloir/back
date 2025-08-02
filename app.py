@@ -47,7 +47,8 @@ def acces_notes(demande):
         matiere TEXT,
         note FLOAT,
         sur FLOAT,
-        coef FLOAT
+        coef FLOAT,
+        autre TEXT
     );""")
     if demande[0] == 0:
         cursor.execute("SELECT * FROM notes WHERE id = ?",(demande[1],))
@@ -56,10 +57,10 @@ def acces_notes(demande):
         conn.close
         return notes
     if demande[0] == 1:
-        cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef) VALUES (?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5]))
+        cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef) VALUES (?,?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5],demande[6]))
         conn.commit
         conn.close
-        return "notes ajoutée."
+        return "note ajoutée."
     
         
 def calcul_moyenne(notes):
@@ -87,7 +88,7 @@ def calcul_moyenne(notes):
         index1 = 0
         while index1 < len(notes):
             if notes[index1][2] == matieres[index][0]:
-                matieres[index].append(notes[index1])
+                matieres[index].append(notes[index1]) if matieres[index][0] == "Espagnole" or matieres[index][0] == "Anglais" else matieres[index].append(notes[index1])
             index1 += 1
         index += 1
 from flask import Flask, request, jsonify
