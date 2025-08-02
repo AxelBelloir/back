@@ -62,41 +62,20 @@ def acces_notes(demande):
         return "note ajoutée."
     
         
-def calcul_moyenne(notes):
+def calcul_moyenne(id):
+    conn = sqlite3.connect("DONNEE.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM notes WHERE id = ?", (id))
+    notes = cursor.fetchall()
     index = 0
-    matieres = [
-        ["Francais",], #francais
-        [
-            "Anglais",["CE",],["CO",],["EE",],["EOI",],["EOC",] #anglais
-        ],
-        [
-            "Espagnole",["CE",],["CO",],["EE",],["EOI",],["EOC",] #espagnole
-        ],
-        ["Histoire",], #Histoire
-        ["Mathematiques",], #Mathematiques
-        ["Phisique",], #Phisique
-        ["SVT",], #SVT
-        ["Techno",], #Techno
-        ["Arts",], #Arts
-        ["Musique",], #Musique
-        ["Sport",], #Sport
-        ["Latin",], #Latin
-        
-    ]
-    while index < len(matieres):
-        index1 = 0
-        while index1 < len(notes):
-            if notes[index1][2] == matieres[index][0]:
-                if matieres[index][0] == "Espagnole" or matieres[index][0] == "Anglais":
-                    index2 = 1
-                    while index2 < 5:
-                        if notes[index1][5] == matieres[index][index2]:
-                            matieres[index][index2].append(notes[index1])
-                        index2 += 1
-                else:
-                    matieres[index].append(notes[index1])
-            index1 += 1
+    note = []
+    while index < len(notes):
+        note.append(notes[3] / notes[4])
         index += 1
+    notes_seules = [n[0] for n in note]
+
+    
+    
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
