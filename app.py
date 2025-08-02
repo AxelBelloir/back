@@ -71,7 +71,7 @@ def calcul_moyenne(id):
     note = 0
     coef = 0
     while index < len(notes):
-        note += notes[index][3] / notes[index][4]
+        note += (notes[index][3] / notes[index][4]) * notes[index][5]
         coef += notes[index][5]
         index += 1
     moyenne = note / coef
@@ -85,19 +85,23 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)  # Important pour autoriser ton frontend à appeler l'API
 @app.route('/api/notes', methods=['POST'])
+@app.route('/api/notes', methods=['POST'])
 def notes():
     data = request.get_json()
-    action = data.get('action', 'inconnu')
+    action = data.get('action')
     if action == 0:
-        id = data.get('id', 'inconnu')
-        matiere = data.get('matiere', 'inconnu')
-        note = data.get('note', 'inconnu')
-        coef = data.get('coef', 'inconnu')
-        autre = data.get('autre', 'inconnu')
-        sur = data.get('sur', 'inconnu')
-        demande = [1,id,matiere,note,sur,coef,autre]
+        id = data.get('id')
+        matiere = data.get('matiere')
+        note = float(data.get('note'))
+        coef = float(data.get('coef'))
+        autre = data.get('autre', '')
+        sur = float(data.get('sur'))
+        demande = [1, id, matiere, note, sur, coef, autre]
         acces_notes(demande)
-        calcul_moyenne(id)
+        moyenne = calcul_moyenne(id)
+        return jsonify({'message': f'Note ajoutée. Moyenne actuelle : {moyenne:.2f}'})
+    return jsonify({'message': 'Action inconnue'}), 400
+
         
 @app.route('/api/greet', methods=['POST'])
 def greet():
