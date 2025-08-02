@@ -53,13 +53,13 @@ def acces_notes(demande):
     if demande[0] == 0:
         cursor.execute("SELECT * FROM notes WHERE id = ?",(demande[1],))
         notes = cursor.fetchall()
-        conn.commit
-        conn.close
+        conn.commit()
+        conn.close()
         return notes
     if demande[0] == 1:
         cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef) VALUES (?,?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5],demande[6]))
-        conn.commit
-        conn.close
+        conn.commit()
+        conn.close()
         return "note ajoutée."
     
         
@@ -89,7 +89,7 @@ def calcul_moyenne(notes):
         while index1 < len(notes):
             if notes[index1][2] == matieres[index][0]:
                 if matieres[index][0] == "Espagnole" or matieres[index][0] == "Anglais":
-                    index2 = 0
+                    index2 = 1
                     while index2 < 4:
                         if notes[index1][5] == matieres[index][index2]:
                             matieres[index][index2].append(notes[index1])
