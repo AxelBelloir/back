@@ -70,9 +70,11 @@ def calcul_moyenne(id):
     index = 0
     note = []
     while index < len(notes):
-        note.append(notes[3] / notes[4])
+        note += notes[index][3] / notes[index][4]
+        coef += notes[index][5]
         index += 1
-    notes_seules = [n[0] for n in note]
+    moyenne = note / coef
+    return moyenne
 
     
     
