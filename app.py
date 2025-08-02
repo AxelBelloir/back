@@ -65,10 +65,11 @@ def acces_notes(demande):
 def calcul_moyenne(id):
     conn = sqlite3.connect("DONNEE.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM notes WHERE id = ?", (id))
+    cursor.execute("SELECT * FROM notes WHERE id = ?", (id,))
     notes = cursor.fetchall()
     index = 0
-    note = []
+    note = 0
+    coef = 0
     while index < len(notes):
         note += notes[index][3] / notes[index][4]
         coef += notes[index][5]
