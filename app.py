@@ -87,6 +87,17 @@ CORS(app)  # Important pour autoriser ton frontend à appeler l'API
 @app.route('/api/notes', methods=['POST'])
 def notes():
     data = request.get_json()
+    action = data.get('action', 'inconnu')
+    if action == 0:
+        id = data.get('id', 'inconnu')
+        matiere = data.get('matiere', 'inconnu')
+        note = data.get('note', 'inconnu')
+        coef = data.get('coef', 'inconnu')
+        autre = data.get('autre', 'inconnu')
+        sur = data.get('sur', 'inconnu')
+        demande = [1,id,matiere,note,sur,coef,autre]
+        acces_notes(demande)
+        
 @app.route('/api/greet', methods=['POST'])
 def greet():
     data = request.get_json()
