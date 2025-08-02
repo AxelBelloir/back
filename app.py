@@ -97,6 +97,7 @@ def notes():
         sur = data.get('sur', 'inconnu')
         demande = [1,id,matiere,note,sur,coef,autre]
         acces_notes(demande)
+        calcul_moyenne(id)
         
 @app.route('/api/greet', methods=['POST'])
 def greet():
