@@ -1,6 +1,5 @@
 def acces_compte(demande):
     import sqlite3
-    import random
     conn = sqlite3.connect("DONNEE.db")
     cursor = conn.cursor()
     
@@ -57,7 +56,7 @@ def acces_notes(demande):
         conn.close()
         return notes
     if demande[0] == 1:
-        cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef) VALUES (?,?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5],demande[6]))
+        cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef, autre) VALUES (?,?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5],demande[6]))
         conn.commit()
         conn.close()
         return "note ajoutée."
