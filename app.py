@@ -89,7 +89,7 @@ def calcul_moyenne(notes):
             if notes[index1][2] == matieres[index][0]:
                 if matieres[index][0] == "Espagnole" or matieres[index][0] == "Anglais":
                     index2 = 1
-                    while index2 < 4:
+                    while index2 < 5:
                         if notes[index1][5] == matieres[index][index2]:
                             matieres[index][index2].append(notes[index1])
                         index2 += 1
