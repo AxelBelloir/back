@@ -1,3 +1,29 @@
+def question(compte,demande):
+    import sqlite3
+    from random import randint
+    conn = sqlite3.connect("DONNEE.db")
+    cursor = conn.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS questions (
+        IDKEY INTEGER PRIMARY KEY AUTOINCREMENT,
+        question TEXT,
+        reponse TEXT
+    );""")
+    conn.commit()
+    if demande[0] == 0:
+        cursor.execute("INSERT INTO questions (question,reponse) VALUES (?,?)",(demande[1],demande[2]))
+        conn.commit()
+        conn.close()
+        resturn "question ajouté"
+    if demande[0] == 1:
+        cursor.execute("SELECT * FROM questions")
+        questions = cursor.fetchall()
+        questions = list(questions)
+        while 0 < len(questions):
+            index = randint(0,len(questions))
+            question = questions[index][0]
+            reponse = input(reponse:)
+            if reponse == questions[index][1]:
+                questions.remove(index)
 def acces_compte(demande):
     import sqlite3
     conn = sqlite3.connect("DONNEE.db")
