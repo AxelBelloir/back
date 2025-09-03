@@ -21,7 +21,6 @@ def question(compte,demande):
         while 0 < len(questions):
             index = randint(0,len(questions))
             question = questions[index][1]
-            reponse = input(reponse:)
             if reponse == questions[index][2]:
                 questions.remove(index)
 def acces_compte(demande):
