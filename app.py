@@ -21,6 +21,9 @@ def question(compte,demande):
         while 0 < len(questions):
             index = randint(0,len(questions))
             question = questions[index][1]
+            return jsonify({'question': f'{question}'})
+            data  = request.get_json()
+            reponse = data.get('reponse')
             if reponse == questions[index][2]:
                 questions.remove(index)
 def acces_compte(demande):
