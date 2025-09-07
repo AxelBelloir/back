@@ -118,7 +118,7 @@ def notes():
     data = request.get_json()
     action = data.get('action')
     if action == 0:
-        id = data.get('id')
+        id = 
         matiere = data.get('matiere')
         note = float(data.get('note'))
         coef = float(data.get('coef'))
@@ -127,7 +127,7 @@ def notes():
         demande = [1, id, matiere, note, sur, coef, autre]
         acces_notes(demande)
         moyenne = calcul_moyenne(id)
-        return jsonify({'message': f'Note ajoutée. Moyenne actuelle : {moyenne:.2f}'})
+        return jsonify({'message': f'Note ajoutée.)
     return jsonify({'message': 'Action inconnue'}), 400
 
         
