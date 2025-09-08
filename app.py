@@ -116,8 +116,8 @@ CORS(app)  # Important pour autoriser ton frontend à appeler l'API
 def notes(id):
     data = request.get_json()
     action = data.get('action')
-    acces_compte(demande)
     if action == 0:
+        id = data.get('id','inconnu')
         matiere = data.get('matiere','inconnu')
         note = float(data.get('note'))
         coef = float(data.get('coef','inconnu'))
