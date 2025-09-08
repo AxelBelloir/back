@@ -126,7 +126,7 @@ def notes(id):
         demande = [1, id, matiere, note, sur, coef, autre]
         acces_notes(demande)
         moyenne = calcul_moyenne(id)
-        return jsonify({'message': f'Note ajoutée.')
+        return jsonify({'message': f'Note ajoutée.'})
     return jsonify({'message': 'Action inconnue'}), 400
 
         
