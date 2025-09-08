@@ -113,25 +113,24 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)  # Important pour autoriser ton frontend à appeler l'API
 @app.route('/api/notes', methods=['POST'])
-@app.route('/api/notes', methods=['POST'])
-def notes():
+def notes(id):
     data = request.get_json()
     action = data.get('action')
+    acces_compte(demande)
     if action == 0:
-        id = 
-        matiere = data.get('matiere')
+        matiere = data.get('matiere','inconnu')
         note = float(data.get('note'))
-        coef = float(data.get('coef'))
-        autre = data.get('autre', '')
-        sur = float(data.get('sur'))
+        coef = float(data.get('coef','inconnu'))
+        autre = data.get('autre','inconnu')
+        sur = float(data.get('sur','inconnu'))
         demande = [1, id, matiere, note, sur, coef, autre]
         acces_notes(demande)
         moyenne = calcul_moyenne(id)
-        return jsonify({'message': f'Note ajoutée.)
+        return jsonify({'message': f'Note ajoutée.')
     return jsonify({'message': 'Action inconnue'}), 400
 
         
-@app.route('/api/greet', methods=['POST'])
+@app.route('/api/greet', methods=['POST']
 def greet():
     data = request.get_json()
     id = data.get('name', 'inconnu')
