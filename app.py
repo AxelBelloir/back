@@ -103,6 +103,8 @@ def calcul_moyenne(id):
         coef += notes[index][5]
         index += 1
     moyenne = note / coef
+    conn.commit()
+    conn.close()
     return moyenne
 
     
