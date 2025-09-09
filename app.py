@@ -130,7 +130,7 @@ def notes(id):
     return jsonify({'message': 'Action inconnue'}), 400
 
         
-@app.route('/api/greet', methods=['POST']
+@app.route('/api/greet', methods=['POST'])
 def greet():
     data = request.get_json()
     id = data.get('name', 'inconnu')
