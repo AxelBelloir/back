@@ -65,6 +65,7 @@ def acces_compte(demande):
             conn.close()
             return "Compte créé."
 def acces_notes(demande):
+    import sqlite3
     conn = sqlite3.connect("DONNEE.db")
     cursor = conn.cursor()
     cursor.execute("""
