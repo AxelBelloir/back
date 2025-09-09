@@ -91,6 +91,7 @@ def acces_notes(demande):
     
         
 def calcul_moyenne(id):
+    import sqlite3
     conn = sqlite3.connect("DONNEE.db")
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM notes WHERE id = ?", (id,))
