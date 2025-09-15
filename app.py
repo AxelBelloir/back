@@ -43,13 +43,13 @@ def acces_compte(demande):
     if action == 0:
         # Connexion
         if identifiant == "Zecejy39" and mot_de_passe == "Zecejy39#college#axel":
-            return "Bienvenue admin"
+            return ["Bienvenue admin","admin"]
         cursor.execute("SELECT * FROM compte WHERE id = ? AND mp = ?", (identifiant, mot_de_passe))
         compte = cursor.fetchone()
         if compte:
             message = "Connexion réussie."
         else:
-            message = "Identifiant ou mot de passe incorrect."
+            message = ["Identifiant ou mot de passe incorrect.",identifiant]
         conn.close()
         return message
 
@@ -143,8 +143,9 @@ def greet():
     mp = data.get('mp', 'inconnu')
     action = data.get('action', 'inconnu')
     demande = [action,id,mp]
-    return_message = acces_compte(demande)
-    return jsonify({'message': f'{return_message}'})
+    return1 = acces_compte(demande)
+    return jsonify({'value' : return1[1]})
+    return jsonify({'message': f'{return1[0]}'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
