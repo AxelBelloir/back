@@ -65,7 +65,8 @@ def acces_compte(demande):
             cursor.execute("INSERT INTO compte (id, mp) VALUES (?, ?)", (identifiant, mot_de_passe))
             conn.commit()
             conn.close()
-            return "Compte créé."
+            return1 = ["Compte créé.",identifiant]
+            return return1
 def acces_notes(demande):
     import sqlite3
     conn = sqlite3.connect("DONNEE.db")
@@ -144,8 +145,8 @@ def greet():
     action = data.get('action', 'inconnu')
     demande = [action,id,mp]
     return1 = acces_compte(demande)
-    return jsonify({'value' : return1[1]})
-    return jsonify({'message': f'{return1[0]}'})
+    return jsonify({'value': return1[1], 'message': return1[0]})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
