@@ -93,36 +93,40 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)  # Important pour autoriser ton frontend à appeler l'API
 @app.route('/api/notes', methods=['POST'])
+@app.route('/api/notes', methods=['POST'])
 def notes():
     data = request.get_json()
     action = data.get('action')
+
     if action == 0:
-        id = data.get('id','inconnu')
-        matiere = data.get('matiere','inconnu')
-        note = float(data.get('note'))
-        coef = float(data.get('coef','inconnu'))
-        autre = data.get('autre','inconnu')
-        sur = float(data.get('sur','inconnu'))
+        # Ajouter une note
+        id = data.get('id', 'inconnu')
+        matiere = data.get('matiere', 'inconnu')
+        note = float(data.get('note', 0))
+        coef = float(data.get('coef', 1))
+        sur = float(data.get('sur', 20))
+        autre = data.get('autre', '')
+
         demande = [1, id, matiere, note, sur, coef, autre]
         acces_notes(demande)
-        moyenne = calcul_moyenne(id)
-        return jsonify({'message': f'Note ajoutée.'})
-    if action == 1:
+        return jsonify({'message': 'Note ajoutée.'})
+
+    elif action == 1:
+        # Calculer la moyenne pour une matière
+        id = data.get('id', 'inconnu')
         matiere = data.get('matiere')
-        id = data.get('id','inconnu')
-        action = 0
-        demande[0,id]
+
+        demande = [0, id]
         notes = acces_notes(demande)
-        index = 0
-        note = []
-        while index < len(notes):
-            tup = notes[index]
-            if tup[2] ==  matiere:
-                note.append(tup)
-            index += 1
-        notes = note
-        moyenne = calcul_moyenne(notes)
-    return jsonify({'message': 'Action inconnue'}), 400
+
+        # Filtrer les notes par matière
+        notes_matiere = [n for n in notes if n[2] == matiere]
+
+        moyenne = calcul_moyenne(notes_matiere)
+        return jsonify({'message': f'Moyenne en {matiere} : {round(moyenne, 2)}'})
+
+    else:
+        return jsonify({'message': 'Action inconnue'}), 400
 
         
 @app.route('/api/greet', methods=['POST'])
