@@ -104,7 +104,7 @@ def notes():
         matiere = data.get('matiere')
         id = data.get('id','inconnu')
         action = 0
-        demande[action,id]
+        demande[0,id]
         notes = acces_notes(demande)
         index = 0
         note = []
