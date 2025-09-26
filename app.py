@@ -105,6 +105,16 @@ def notes():
     if action == 1:
         matiere = data.get('matiere')
         id = data.get('id','inconnu')
+        action = 0
+        demande[action,id]
+        notes = acces_notes(demande)
+        index = 0
+        note = []
+        while index < len(notes):
+            note.append(notes[index][2])
+            index += 1
+        notes = note
+        moyenne = calcul_moyenne(notes)
     return jsonify({'message': 'Action inconnue'}), 400
 
         
