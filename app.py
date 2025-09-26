@@ -128,7 +128,7 @@ def notes():
         id = data.get('id', 'inconnu')
         demande = [0, id]
         notes = acces_notes(demande)
-        moyenne = calcul_moyenne(notes_matiere)
+        moyenne = calcul_moyenne(notes)
         return jsonify({'message': f'{round(moyenne, 2)}'})
     else:
         return jsonify({'message': 'Action inconnue'}), 400
