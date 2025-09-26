@@ -67,18 +67,13 @@ def acces_notes(demande):
         return "note ajoutée."
     
         
-def calcul_moyenne(id):
-    import sqlite3
-    conn = sqlite3.connect("DONNEE.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM notes WHERE id = ?", (id,))
-    notes = cursor.fetchall()
+def calcul_moyenne(notes):
     index = 0
-    note = 0
     coef = 0
+    note = 0
     while index < len(notes):
-        note += (notes[index][3] / notes[index][4]) * notes[index][5]
         coef += notes[index][5]
+        note += notes[index][3]
         index += 1
     moyenne = note / coef
     conn.commit()
