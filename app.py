@@ -68,15 +68,22 @@ def acces_notes(demande):
     
         
 def calcul_moyenne(notes):
-    index = 0
-    coef = 0
-    note = 0
-    while index < len(notes):
-        coef += notes[index][5]
-        note += notes[index][3]
-        index += 1
-    moyenne = note / coef
-    return moyenne
+    if not notes:
+        return 0
+    total_pondere = 0
+    total_coef = 0
+    for n in notes:
+        note = n[3]
+        sur = n[4]
+        coef = n[5]
+        if sur == 0:
+            continue
+        # Note normalisée sur 20, pondérée par le coef
+        total_pondere += (note / sur) * 20 * coef
+        total_coef += coef
+    if total_coef == 0:
+        return 0
+    return total_pondere / total_coef
 
     
     
