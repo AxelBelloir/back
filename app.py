@@ -76,8 +76,6 @@ def calcul_moyenne(notes):
         note += notes[index][3]
         index += 1
     moyenne = note / coef
-    conn.commit()
-    conn.close()
     return moyenne
 
     
@@ -111,7 +109,9 @@ def notes():
         index = 0
         note = []
         while index < len(notes):
-            note.append(notes[index][2])
+            tup = notes[index]
+            if tup[2] ==  matiere:
+                note.append(tup)
             index += 1
         notes = note
         moyenne = calcul_moyenne(notes)
