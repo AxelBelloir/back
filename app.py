@@ -123,7 +123,7 @@ def notes():
         notes_matiere = [n for n in notes if n[2] == matiere]
 
         moyenne = calcul_moyenne(notes_matiere)
-        return jsonify({'message': f'Moyenne en {matiere} : {round(moyenne, 2)}'})
+        return jsonify({'message': f'{round(moyenne, 2)}'})
 
     else:
         return jsonify({'message': 'Action inconnue'}), 400
