@@ -137,7 +137,7 @@ def notes():
         demande = [0, id]
         notes = acces_notes(demande)
         notes_matiere = [n for n in notes if n[2] == matiere]
-        if other =! 0:
+        if other != 0:
             index = 0
             while index < other:
                 index1 = 0
