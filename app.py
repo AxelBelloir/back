@@ -137,7 +137,19 @@ def notes():
         demande = [0, id]
         notes = acces_notes(demande)
         notes_matiere = [n for n in notes if n[2] == matiere]
-        return jsonify({'messsage': f'notes_matieres'})
+        if other =! 0:
+            index = 0
+            while index < other:
+                index1 = 0
+                notes = []
+                while index1 < 4:
+                    notes_matiere1 = notes_matiere[index1]
+                    notes.append(notes_matiere1)
+                    index += 1
+                index += 1
+        else:
+            notes = [notes_matiere[0],notes_matiere[1],notes_matiere[2],notes_matiere[3],notes_matiere[4]]
+        return jsonify({'messsage': f'notes'})
     else:
         return jsonify({'message': 'Action inconnue'}), 400
 
