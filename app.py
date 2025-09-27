@@ -149,7 +149,7 @@ def notes():
                 index += 1
         else:
             notes = [notes_matiere[0],notes_matiere[1],notes_matiere[2],notes_matiere[3],notes_matiere[4]]
-        return jsonify({'messsage': f'{notes}'})
+        return jsonify({'p1': f'{notes[0]}','p2': f'{notes[1]}','p3': f'{notes[2]}','p4': f'{notes[3]}','p5': f'{notes[4]}'})
     else:
         return jsonify({'message': 'Action inconnue'}), 400
 
