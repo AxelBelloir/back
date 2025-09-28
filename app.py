@@ -131,31 +131,24 @@ def notes():
         moyenne = calcul_moyenne(notes)
         return jsonify({'message': f'{round(moyenne, 2)}'})
     elif action == 3:
-        id = data.get('id','inconnu')
-        matiere = data.get('matiere','inconnu')
-        other = data.get('other','inconnu')
-        demande = [0, id]
-        notes = acces_notes(demande)
-        notes_matiere = [n for n in notes if n[2] == matiere]
-        if other != 0:
-            index = 0
-            while index < other:
-                index1 = 0
-                notes = []
-                while index1 < 4:
-                    notes_matiere1 = notes_matiere[index1]
-                    notes.append(notes_matiere1)
-                    index1 += 1
-                index += 1
-        else:
-            notes = [notes_matiere[0],notes_matiere[1],notes_matiere[2],notes_matiere[3],notes_matiere[4]]
-        return jsonify({
-    'p1': f'{notes[0]}' if len(notes) > 0 else '',
-    'p2': f'{notes[1]}' if len(notes) > 1 else '',
-    'p3': f'{notes[2]}' if len(notes) > 2 else '',
-    'p4': f'{notes[3]}' if len(notes) > 3 else '',
-    'p5': f'{notes[4]}' if len(notes) > 4 else ''
-})
+    id = data.get('id', 'inconnu')
+    matiere = data.get('matiere', 'inconnu')
+    count = int(data.get('other', 5))  # nombre de notes à retourner
+
+    demande = [0, id]
+    toutes_notes = acces_notes(demande)
+    notes_matiere = [n for n in toutes_notes if n[2] == matiere]
+
+    # Sécurité : éviter d'accéder à des index inexistants
+    if len(notes_matiere) < count:
+        return jsonify({'message': 'Pas assez de notes'}), 400
+
+    result = {}
+    for i in range(count):
+        result[f'p{i+1}'] = str(notes_matiere[i])
+
+    return jsonify(result)
+
 
     else:
         return jsonify({'message': 'Action inconnue'}), 400
