@@ -145,11 +145,18 @@ def notes():
                 while index1 < 4:
                     notes_matiere1 = notes_matiere[index1]
                     notes.append(notes_matiere1)
-                    index += 1
+                    index1 += 1
                 index += 1
         else:
             notes = [notes_matiere[0],notes_matiere[1],notes_matiere[2],notes_matiere[3],notes_matiere[4]]
-        return jsonify({'p1': f'{notes[0]}','p2': f'{notes[1]}','p3': f'{notes[2]}','p4': f'{notes[3]}','p5': f'{notes[4]}'})
+        return jsonify({
+    'p1': f'{notes[0]}' if len(notes) > 0 else '',
+    'p2': f'{notes[1]}' if len(notes) > 1 else '',
+    'p3': f'{notes[2]}' if len(notes) > 2 else '',
+    'p4': f'{notes[3]}' if len(notes) > 3 else '',
+    'p5': f'{notes[4]}' if len(notes) > 4 else ''
+})
+
     else:
         return jsonify({'message': 'Action inconnue'}), 400
 
