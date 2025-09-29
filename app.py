@@ -131,23 +131,21 @@ def notes():
         moyenne = calcul_moyenne(notes)
         return jsonify({'message': f'{round(moyenne, 2)}'})
     elif action == 3:
-    id = data.get('id', 'inconnu')
-    matiere = data.get('matiere', 'inconnu')
-    count = int(data.get('other', 5))  # nombre de notes à retourner
+      id = data.get('id', 'inconnu')
+      matiere = data.get('matiere', 'inconnu')
+      count = int(data.get('other', 5))  # nombre de notes à retourner
 
-    demande = [0, id]
-    toutes_notes = acces_notes(demande)
-    notes_matiere = [n for n in toutes_notes if n[2] == matiere]
+      demande = [0, id]
+      toutes_notes = acces_notes(demande)
+      notes_matiere = [n for n in toutes_notes if n[2] == matiere]
 
-    # Sécurité : éviter d'accéder à des index inexistants
-    if len(notes_matiere) < count:
-        return jsonify({'message': 'Pas assez de notes'}), 400
+      result = {}
+      for i in range(count):
+          result[f'p{i+1}'] = str(notes_matiere[i])
 
-    result = {}
-    for i in range(count):
-        result[f'p{i+1}'] = str(notes_matiere[i])
-
-    return jsonify(result)
+      return jsonify({
+        'p1
+      })
 
 
     else:
