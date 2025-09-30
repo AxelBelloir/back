@@ -92,7 +92,7 @@ def acces_notes(demande):
 
 def calcul_moyenne(notes):
     if not notes:
-        return 0
+        return 
     total_pondere = 0
     total_coef = 0
     for n in notes:
