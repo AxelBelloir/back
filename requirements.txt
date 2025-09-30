@@ -1,2 +1,3 @@
 flask
 flask-cors
+pip install psycopg2-binary
