@@ -158,7 +158,7 @@ def notes():
         notes_liste = []
         for index in range(min(5, len(notes))):
             n = notes[index]
-            formatted = f"{n[3]}  /  {n[4]}  /  {n[5]}  /  {n[6]}"
+            formatted = f"{n[3]}/{n[4]}        ({n[5]})               {n[6]}"
             notes_liste.append(formatted)
 
         # Remplir les cases vides si moins de 5
