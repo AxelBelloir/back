@@ -147,7 +147,7 @@ def notes():
 
     elif action == 3:
         id = data.get('id', 'inconnu')
-        matiere = data.get('matiere', 'inconnu')
+        matiere = data.get('selectMatiere', 'inconnu')
         demande = [0, id]
         toutes_notes = acces_notes(demande)
 
