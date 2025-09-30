@@ -148,15 +148,18 @@ def notes():
     elif action == 3:
         id = data.get('id', 'inconnu')
         matiere = data.get('matiere', 'inconnu')
-        count = int(data.get('other', 5))
         demande = [0, id]
-        toutes_notes = acces_notes(demande)
-        notes_matiere = [n for n in toutes_notes if n[2] == matiere]
-        result = {}
-
-        for i in range(min(count, len(notes_matiere))):
-            result[f'p{i+1}'] = str(notes_matiere[i])
-
+        notes = acces_notes(demande)
+        index = 0
+        while index < 4 or index < len(notes):
+            note.append(notes[index])
+            index += 1
+        p1 = f"{note[0][3]}  /  {note[0][4]}  /  {note[0][5]}  /  {note[0][6]}
+        p2 = f"{note[1][3]}  /  {note[1][4]}  /  {note[1][5]}  /  {note[1][6]}
+        p3 = f"{note[2][3]}  /  {note[2][4]}  /  {note[2][5]}  /  {note[2][6]}
+        p4 = f"{note[3][3]}  /  {note[3][4]}  /  {note[3][5]}  /  {note[3][6]}
+        p5 = f"{note[4][3]}  /  {note[4][4]}  /  {note[4][5]}  /  {note[4][6]}
+        
         return jsonify(result)
 
     else:
