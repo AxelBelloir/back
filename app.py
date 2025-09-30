@@ -1,52 +1,71 @@
 
+import psycopg2
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+# === PARAMÈTRES DE CONNEXION POSTGRES ===
+DB_PARAMS = {
+    'host': 'dpg-d3dqudb7mgec73d460g0-a',
+    'dbname': 'serveur',
+    'user': 'serveur_user',
+    'password': 'gXsmIjafpoEtKMmreRgoUTk6CkNR57kX',  # <= remplace par le bon mot de passe
+    'port': 5432
+}
+
+def get_conn():
+    return psycopg2.connect(**DB_PARAMS)
+
+
 def acces_compte(demande):
-    import sqlite3
-    conn = sqlite3.connect("DONNEE.db")
+    conn = get_conn()
     cursor = conn.cursor()
-    
+
+    # Créer la table si elle n'existe pas
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS compte (
-        IDKEY INTEGER PRIMARY KEY AUTOINCREMENT,
+        IDKEY SERIAL PRIMARY KEY,
         id TEXT,
         mp TEXT
     );""")
-    
+
     action, identifiant, mot_de_passe = demande
 
     if action == 0:
         # Connexion
         if identifiant == "Zecejy39" and mot_de_passe == "Zecejy39#college#axel":
-            return ["Bienvenue admin","admin"]
-        cursor.execute("SELECT * FROM compte WHERE id = ? AND mp = ?", (identifiant, mot_de_passe))
+            return ["Bienvenue admin", "admin"]
+
+        cursor.execute("SELECT * FROM compte WHERE id = %s AND mp = %s", (identifiant, mot_de_passe))
         compte = cursor.fetchone()
-        if compte:
-            message = "Connexion réussie."
-        else:
-            message = ["Identifiant ou mot de passe incorrect.",identifiant]
         conn.close()
-        return message
+
+        if compte:
+            return ["Connexion réussie.", identifiant]
+        else:
+            return ["Identifiant ou mot de passe incorrect.", identifiant]
 
     elif action == 1:
         # Création de compte
-        cursor.execute("SELECT * FROM compte WHERE id = ?", (identifiant,))
+        cursor.execute("SELECT * FROM compte WHERE id = %s", (identifiant,))
         compte_existe = cursor.fetchone()
-        
+
         if compte_existe:
             conn.close()
             return "Cet identifiant est déjà utilisé."
         else:
-            cursor.execute("INSERT INTO compte (id, mp) VALUES (?, ?)", (identifiant, mot_de_passe))
+            cursor.execute("INSERT INTO compte (id, mp) VALUES (%s, %s)", (identifiant, mot_de_passe))
             conn.commit()
             conn.close()
-            return1 = ["Compte créé.",identifiant]
-            return return1
+            return ["Compte créé.", identifiant]
+
+
 def acces_notes(demande):
-    import sqlite3
-    conn = sqlite3.connect("DONNEE.db")
+    conn = get_conn()
     cursor = conn.cursor()
+
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS notes(
-        idkey INTEGER PRIMARY KEY AUTOINCREMENT,
+    CREATE TABLE IF NOT EXISTS notes (
+        idkey SERIAL PRIMARY KEY,
         id TEXT,
         matiere TEXT,
         note FLOAT,
@@ -54,19 +73,23 @@ def acces_notes(demande):
         coef FLOAT,
         autre TEXT
     );""")
+
     if demande[0] == 0:
-        cursor.execute("SELECT * FROM notes WHERE id = ?",(demande[1],))
+        cursor.execute("SELECT * FROM notes WHERE id = %s", (demande[1],))
         notes = cursor.fetchall()
-        conn.commit()
         conn.close()
         return notes
-    if demande[0] == 1:
-        cursor.execute("INSERT INTO notes (id, matiere, note, sur, coef, autre) VALUES (?,?,?,?,?,?)", (demande[1],demande[2],demande[3],demande[4],demande[5],demande[6]))
+
+    elif demande[0] == 1:
+        cursor.execute("""
+            INSERT INTO notes (id, matiere, note, sur, coef, autre)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (demande[1], demande[2], demande[3], demande[4], demande[5], demande[6]))
         conn.commit()
         conn.close()
         return "note ajoutée."
-    
-        
+
+
 def calcul_moyenne(notes):
     if not notes:
         return 0
@@ -78,28 +101,23 @@ def calcul_moyenne(notes):
         coef = n[5]
         if sur == 0:
             continue
-        # Note normalisée sur 20, pondérée par le coef
         total_pondere += (note / sur) * 20 * coef
         total_coef += coef
     if total_coef == 0:
         return 0
     return total_pondere / total_coef
 
-    
-    
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 
+# === FLASK APP ===
 app = Flask(__name__)
-CORS(app)  # Important pour autoriser ton frontend à appeler l'API
-@app.route('/api/notes', methods=['POST'])
+CORS(app)
+
 @app.route('/api/notes', methods=['POST'])
 def notes():
     data = request.get_json()
     action = data.get('action')
 
     if action == 0:
-        # Ajouter une note
         id = data.get('id', 'inconnu')
         matiere = data.get('matiere', 'inconnu')
         note = float(data.get('note', 0))
@@ -112,53 +130,46 @@ def notes():
         return jsonify({'message': 'Note ajoutée.'})
 
     elif action == 1:
-        # Calculer la moyenne pour une matière
         id = data.get('id', 'inconnu')
         matiere = data.get('matiere')
-
         demande = [0, id]
         notes = acces_notes(demande)
-
-        # Filtrer les notes par matière
         notes_matiere = [n for n in notes if n[2] == matiere]
-
         moyenne = calcul_moyenne(notes_matiere)
         return jsonify({'message': f'{round(moyenne, 2)}'})
+
     elif action == 2:
         id = data.get('id', 'inconnu')
         demande = [0, id]
         notes = acces_notes(demande)
         moyenne = calcul_moyenne(notes)
         return jsonify({'message': f'{round(moyenne, 2)}'})
+
     elif action == 3:
-      id = data.get('id', 'inconnu')
-      matiere = data.get('matiere', 'inconnu')
-      count = int(data.get('other', 5))  # nombre de notes à retourner
+        id = data.get('id', 'inconnu')
+        matiere = data.get('matiere', 'inconnu')
+        count = int(data.get('other', 5))
+        demande = [0, id]
+        toutes_notes = acces_notes(demande)
+        notes_matiere = [n for n in toutes_notes if n[2] == matiere]
+        result = {}
 
-      demande = [0, id]
-      toutes_notes = acces_notes(demande)
-      notes_matiere = [n for n in toutes_notes if n[2] == matiere]
+        for i in range(min(count, len(notes_matiere))):
+            result[f'p{i+1}'] = str(notes_matiere[i])
 
-      result = {}
-      for i in range(count):
-          result[f'p{i+1}'] = str(notes_matiere[i])
-
-      return jsonify({
-        'p1
-      })
-
+        return jsonify(result)
 
     else:
         return jsonify({'message': 'Action inconnue'}), 400
 
-        
+
 @app.route('/api/greet', methods=['POST'])
 def greet():
     data = request.get_json()
     id = data.get('name', 'inconnu')
     mp = data.get('mp', 'inconnu')
     action = data.get('action', 'inconnu')
-    demande = [action,id,mp]
+    demande = [action, id, mp]
     return1 = acces_compte(demande)
     return jsonify({'value': return1[1], 'message': return1[0]})
 
