@@ -149,24 +149,28 @@ def notes():
         id = data.get('id', 'inconnu')
         matiere = data.get('matiere', 'inconnu')
         demande = [0, id]
-        notes = acces_notes(demande)
-        index = 0
-        note = []
-        while index < 4 or index < len(notes):
-            note.append(notes[index])
-            index += 1
-        p1 = f"{note[0][3]}  /  {note[0][4]}  /  {note[0][5]}  /  {note[0][6]}"
-        p2 = f"{note[1][3]}  /  {note[1][4]}  /  {note[1][5]}  /  {note[1][6]}"
-        p3 = f"{note[2][3]}  /  {note[2][4]}  /  {note[2][5]}  /  {note[2][6]}"
-        p4 = f"{note[3][3]}  /  {note[3][4]}  /  {note[3][5]}  /  {note[3][6]}"
-        p5 = f"{note[4][3]}  /  {note[4][4]}  /  {note[4][5]}  /  {note[4][6]}"
-        
+        toutes_notes = acces_notes(demande)
+
+        # Filtrer par matière
+        notes = [n for n in toutes_notes if n[2] == matiere]
+
+        # Ne garder que les 5 premières (ou moins)
+        notes_liste = []
+        for index in range(min(5, len(notes))):
+            n = notes[index]
+            formatted = f"{n[3]}  /  {n[4]}  /  {n[5]}  /  {n[6]}"
+            notes_liste.append(formatted)
+
+        # Remplir les cases vides si moins de 5
+        while len(notes_liste) < 5:
+            notes_liste.append("Aucune note")
+
         return jsonify({
-            'p1' : p1,
-            'p2' : p2,
-            'p3' : p3,
-            'p4' : p4,
-            'p5' : p5,
+            'p1': notes_liste[0],
+            'p2': notes_liste[1],
+            'p3': notes_liste[2],
+            'p4': notes_liste[3],
+            'p5': notes_liste[4],
         })
 
     else:
