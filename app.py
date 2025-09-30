@@ -151,6 +151,7 @@ def notes():
         demande = [0, id]
         notes = acces_notes(demande)
         index = 0
+        note = []
         while index < 4 or index < len(notes):
             note.append(notes[index])
             index += 1
