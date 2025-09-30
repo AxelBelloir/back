@@ -154,13 +154,19 @@ def notes():
         while index < 4 or index < len(notes):
             note.append(notes[index])
             index += 1
-        p1 = f"{note[0][3]}  /  {note[0][4]}  /  {note[0][5]}  /  {note[0][6]}
-        p2 = f"{note[1][3]}  /  {note[1][4]}  /  {note[1][5]}  /  {note[1][6]}
-        p3 = f"{note[2][3]}  /  {note[2][4]}  /  {note[2][5]}  /  {note[2][6]}
-        p4 = f"{note[3][3]}  /  {note[3][4]}  /  {note[3][5]}  /  {note[3][6]}
-        p5 = f"{note[4][3]}  /  {note[4][4]}  /  {note[4][5]}  /  {note[4][6]}
+        p1 = f"{note[0][3]}  /  {note[0][4]}  /  {note[0][5]}  /  {note[0][6]}"
+        p2 = f"{note[1][3]}  /  {note[1][4]}  /  {note[1][5]}  /  {note[1][6]}"
+        p3 = f"{note[2][3]}  /  {note[2][4]}  /  {note[2][5]}  /  {note[2][6]}"
+        p4 = f"{note[3][3]}  /  {note[3][4]}  /  {note[3][5]}  /  {note[3][6]}"
+        p5 = f"{note[4][3]}  /  {note[4][4]}  /  {note[4][5]}  /  {note[4][6]}"
         
-        return jsonify(result)
+        return jsonify({
+            'p1' : p1,
+            'p2' : p2,
+            'p3' : p3,
+            'p4' : p4,
+            'p5' : p5,
+        })
 
     else:
         return jsonify({'message': 'Action inconnue'}), 400
