@@ -135,12 +135,18 @@ def calcul_moyenne(notes):
             total_pondere += (note / sur) * 20 * coef
             total_coef += coef
 
-    for i in range(5):
-        total_pondere += moyenne_ponderee(esp[i])
-        if esp[i]: total_coef += 1
-
-        total_pondere += moyenne_ponderee(ang[i])
-        if ang[i]: total_coef += 1
+    index = 0
+    while index < 5:
+        index1 = 0
+        angCoef = 0
+        angNote = 0
+        while index1 < len(ang[index]):
+            note,sur,coef = ang[index][index1][0],ang[index][index1][1],ang[index][index1][2]
+            angNote += (note / sur) * 20 * coef
+            angCoef += coef
+            index1 += 1
+        ang[index] = angNote / angCoef if angCoef else 0
+        index += 1
 
     return total_pondere / total_coef if total_coef else 0
 
