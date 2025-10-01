@@ -107,8 +107,8 @@ def boucleWhile(demande):
 def calcul_moyenne(notes):
     if not notes:
         return
-    esp = [[][][][][]]
-    ang = [[][][][][]]
+    esp = [[],[],[],[],[]]
+    ang = [[],[],[],[],[]]
     total_pondere = 0
     total_coef = 0
     for n in notes:
