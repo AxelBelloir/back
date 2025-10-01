@@ -96,7 +96,8 @@ def boucleWhile(demande):
         notes = 0
         coefs = 0
         while index < len(demande[1]):
-            donnee = demande[2]
+            donnee = demande[1]
+            donnee = donnee[index]
             note = donnee[3] / donnee[4]
             notes += note
             coefs += donnee[5]
@@ -119,33 +120,38 @@ def calcul_moyenne(notes):
             autre = n[6]
             if matiere == "Espagnole":
                 if autre == "EE":
-                    esp[0].append(note,sur,coef)
+                    esp[0].append([note,sur,coef])
                 if autre == "CE":
-                    esp[1].append(note,sur,coef)
+                    esp[1].append([note,sur,coef])
                 if autre == "CO":
-                    esp[2].append(note,sur,coef)
+                    esp[2].append([note,sur,coef])
                 if autre == "EOC":
-                    esp[3].append(note,sur,coef)
+                    esp[3].append([note,sur,coef])
                 if autre == "EOI":
-                    esp[4].append(note,sur,coef)
+                    esp[4].append([note,sur,coef])
             else:
                 if autre == "EE":
-                    ang[0].append(note,sur,coef)
+                    ang[0].append([note,sur,coef]
                 if autre == "CE":
-                    ang[1].append(note,sur,coef)
+                    ang[1].append([note,sur,coef])
                 if autre == "CO":
-                    ang[2].append(note,sur,coef)
+                    ang[2].append([note,sur,coef]
                 if autre == "EOC":
-                    ang[3].append(note,sur,coef)
+                    ang[3].append([note,sur,coef]
                 if autre == "EOI":
-                    ang[4].append(note,sur,coef)
+                    ang[4].append([note,sur,coef])
         else:
             if sur == 0:
                 continue
             total_pondere += (note / sur) * 20 * coef
             total_coef += coef
     index = 0
-    result = boucleWhile(demande)
+    ang1 = []
+    while index < 4:
+        demande = [0,ang[index],]
+        result = boucleWhile(demande)
+        ang1.append(result)
+        index += 1
     if total_coef == 0:
         return 0
     return total_pondere / total_coef
