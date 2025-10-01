@@ -3,36 +3,38 @@ import psycopg2
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# === PARAMÈTRES DE CONNEXION POSTGRES ===
+# === PARAMÈTRES DE CONNEXION POSTGRES (EN DUR) ===
 DB_PARAMS = {
     'host': 'dpg-d3dqudb7mgec73d460g0-a',
     'dbname': 'serveur',
     'user': 'serveur_user',
-    'password': 'gXsmIjafpoEtKMmreRgoUTk6CkNR57kX',  # <= remplace par le bon mot de passe
+    'password': 'gXsmIjafpoEtKMmreRgoUTk6CkNR57kX',
     'port': 5432
 }
+
 
 def get_conn():
     return psycopg2.connect(**DB_PARAMS)
 
 
+# === GESTION DES COMPTES ===
 def acces_compte(demande):
     conn = get_conn()
     cursor = conn.cursor()
 
-    # Créer la table si elle n'existe pas
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS compte (
-        IDKEY SERIAL PRIMARY KEY,
-        id TEXT,
-        mp TEXT
-    );""")
+        CREATE TABLE IF NOT EXISTS compte (
+            IDKEY SERIAL PRIMARY KEY,
+            id TEXT,
+            mp TEXT
+        );
+    """)
 
     action, identifiant, mot_de_passe = demande
 
     if action == 0:
-        # Connexion
         if identifiant == "Zecejy39" and mot_de_passe == "Zecejy39#college#axel":
+            conn.close()
             return ["Bienvenue admin", "admin"]
 
         cursor.execute("SELECT * FROM compte WHERE id = %s AND mp = %s", (identifiant, mot_de_passe))
@@ -45,7 +47,6 @@ def acces_compte(demande):
             return ["Identifiant ou mot de passe incorrect.", identifiant]
 
     elif action == 1:
-        # Création de compte
         cursor.execute("SELECT * FROM compte WHERE id = %s", (identifiant,))
         compte_existe = cursor.fetchone()
 
@@ -59,20 +60,22 @@ def acces_compte(demande):
             return ["Compte créé.", identifiant]
 
 
+# === GESTION DES NOTES ===
 def acces_notes(demande):
     conn = get_conn()
     cursor = conn.cursor()
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS notes (
-        idkey SERIAL PRIMARY KEY,
-        id TEXT,
-        matiere TEXT,
-        note FLOAT,
-        sur FLOAT,
-        coef FLOAT,
-        autre TEXT
-    );""")
+        CREATE TABLE IF NOT EXISTS notes (
+            idkey SERIAL PRIMARY KEY,
+            id TEXT,
+            matiere TEXT,
+            note FLOAT,
+            sur FLOAT,
+            coef FLOAT,
+            autre TEXT
+        );
+    """)
 
     if demande[0] == 0:
         cursor.execute("SELECT * FROM notes WHERE id = %s", (demande[1],))
@@ -87,86 +90,65 @@ def acces_notes(demande):
         """, (demande[1], demande[2], demande[3], demande[4], demande[5], demande[6]))
         conn.commit()
         conn.close()
-        return "note ajoutée."
+        return "Note ajoutée."
 
-def boucleWhile(demande):
-    index = 0
-    action = demande[0]
-    if action == 0:
-        notes = 0
-        coefs = 0
-        while index < len(demande[1]):
-            donnee = demande[1]
-            donnee = donnee[index]
-            note = donnee[3] / donnee[4]
-            note *= 20
-            notes += note
-            coefs += donnee[5]
-            index += 1
-        return notes / coefs
-            
+
+def moyenne_ponderee(notes):
+    total = 0
+    coef_total = 0
+    for note, sur, coef in notes:
+        if sur == 0:
+            continue
+        note20 = (note / sur) * 20
+        total += note20 * coef
+        coef_total += coef
+    return total / coef_total if coef_total else 0
+
+
 def calcul_moyenne(notes):
     if not notes:
-        return
-    esp = [[],[],[],[],[]]
-    ang = [[],[],[],[],[]]
+        return 0
+
+    esp = [[] for _ in range(5)]
+    ang = [[] for _ in range(5)]
+
     total_pondere = 0
     total_coef = 0
+
     for n in notes:
-        note = n[3]
-        sur = n[4]
-        coef = n[5]
+        note, sur, coef = n[3], n[4], n[5]
         matiere = n[2]
-        if matiere == "Espagnole" or matiere == "Anglais":
-            autre = n[6]
-            if matiere == "Espagnole":
-                if autre == "EE":
-                    esp[0].append([note,sur,coef])
-                if autre == "CE":
-                    esp[1].append([note,sur,coef])
-                if autre == "CO":
-                    esp[2].append([note,sur,coef])
-                if autre == "EOC":
-                    esp[3].append([note,sur,coef])
-                if autre == "EOI":
-                    esp[4].append([note,sur,coef])
-            else:
-                if autre == "EE":
-                    ang[0].append([note,sur,coef])
-                if autre == "CE":
-                    ang[1].append([note,sur,coef])
-                if autre == "CO":
-                    ang[2].append([note,sur,coef])
-                if autre == "EOC":
-                    ang[3].append([note,sur,coef])
-                if autre == "EOI":
-                    ang[4].append([note,sur,coef])
+        autre = n[6]
+
+        if sur == 0:
+            continue
+
+        if matiere == "Espagnole":
+            if autre in ["EE", "CE", "CO", "EOC", "EOI"]:
+                index = ["EE", "CE", "CO", "EOC", "EOI"].index(autre)
+                esp[index].append([note, sur, coef])
+        elif matiere == "Anglais":
+            if autre in ["EE", "CE", "CO", "EOC", "EOI"]:
+                index = ["EE", "CE", "CO", "EOC", "EOI"].index(autre)
+                ang[index].append([note, sur, coef])
         else:
-            if sur == 0:
-                continue
             total_pondere += (note / sur) * 20 * coef
             total_coef += coef
-    index = 0
-    ang1 = []
-    while index < 4:
-        demande = [0,ang[index]]
-        result = boucleWhile(demande)
-        ang1.append(result)
-        index += 1
-    esp1 = []
-    while index < 4:
-        demande = [0,esp[index]]
-        result = boucleWhile(demande)
-        esp1.append(result)
-        index += 1
-    if total_coef == 0:
-        return 0
-    return total_pondere / total_coef
+
+    for i in range(5):
+        total_pondere += moyenne_ponderee(esp[i])
+        if esp[i]: total_coef += 1
+
+        total_pondere += moyenne_ponderee(ang[i])
+        if ang[i]: total_coef += 1
+
+    return total_pondere / total_coef if total_coef else 0
 
 
 # === FLASK APP ===
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route('/api/notes', methods=['POST'])
 def notes():
@@ -174,50 +156,40 @@ def notes():
     action = data.get('action')
 
     if action == 0:
-        id = data.get('id', 'inconnu')
-        matiere = data.get('matiere', 'inconnu')
-        note = float(data.get('note', 0))
-        coef = float(data.get('coef', 1))
-        sur = float(data.get('sur', 20))
-        autre = data.get('autre', '')
+        try:
+            id = data.get('id')
+            matiere = data.get('matiere')
+            note = float(data.get('note'))
+            coef = float(data.get('coef'))
+            sur = float(data.get('sur'))
+            autre = data.get('autre', '')
+        except (TypeError, ValueError):
+            return jsonify({'message': 'Valeurs invalides'}), 400
 
-        demande = [1, id, matiere, note, sur, coef, autre]
-        acces_notes(demande)
+        acces_notes([1, id, matiere, note, sur, coef, autre])
         return jsonify({'message': 'Note ajoutée.'})
 
     elif action == 1:
-        id = data.get('id', 'inconnu')
+        id = data.get('id')
         matiere = data.get('matiere')
-        demande = [0, id]
-        notes = acces_notes(demande)
-        notes_matiere = [n for n in notes if n[2] == matiere]
-        moyenne = calcul_moyenne(notes_matiere)
+        notes = [n for n in acces_notes([0, id]) if n[2] == matiere]
+        moyenne = calcul_moyenne(notes)
         return jsonify({'message': f'{round(moyenne, 2)}'})
 
     elif action == 2:
-        id = data.get('id', 'inconnu')
-        demande = [0, id]
-        notes = acces_notes(demande)
+        id = data.get('id')
+        notes = acces_notes([0, id])
         moyenne = calcul_moyenne(notes)
         return jsonify({'message': f'{round(moyenne, 2)}'})
 
     elif action == 3:
-        id = data.get('id', 'inconnu')
-        matiere = data.get('selectMatiere', 'inconnu')
-        demande = [0, id]
-        toutes_notes = acces_notes(demande)
+        id = data.get('id')
+        matiere = data.get('selectMatiere')
+        notes = [n for n in acces_notes([0, id]) if n[2] == matiere][:5]
 
-        # Filtrer par matière
-        notes = [n for n in toutes_notes if n[2] == matiere]
-
-        # Ne garder que les 5 premières (ou moins)
-        notes_liste = []
-        for index in range(min(5, len(notes))):
-            n = notes[index]
-            formatted = f"{n[3]}/{n[4]}        ({n[5]})               {n[6]}"
-            notes_liste.append(formatted)
-
-        # Remplir les cases vides si moins de 5
+        notes_liste = [
+            f"{n[3]}/{n[4]}        ({n[5]})               {n[6]}" for n in notes
+        ]
         while len(notes_liste) < 5:
             notes_liste.append("Aucune note")
 
@@ -236,12 +208,23 @@ def notes():
 @app.route('/api/greet', methods=['POST'])
 def greet():
     data = request.get_json()
-    id = data.get('name', 'inconnu')
-    mp = data.get('mp', 'inconnu')
-    action = data.get('action', 'inconnu')
-    demande = [action, id, mp]
-    return1 = acces_compte(demande)
-    return jsonify({'value': return1[1], 'message': return1[0]})
+    id = data.get('name', '')
+    mp = data.get('mp', '')
+    action = data.get('action', 0)
+    retour = acces_compte([action, id, mp])
+
+    return jsonify({'value': retour[1], 'message': retour[0]})
+
+
+@app.route('/')
+def index():
+    return jsonify({
+        'status': 'API en ligne',
+        'routes': [
+            '/api/greet',
+            '/api/notes',
+        ]
+    })
 
 
 if __name__ == '__main__':
