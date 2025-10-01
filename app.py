@@ -134,7 +134,7 @@ def calcul_moyenne(notes):
         else:
             total_pondere += (note / sur) * 20 * coef
             total_coef += coef
-
+    coefsSpe = [0.25,0.25,0.25,0.12,0.13]
     index = 0
     while index < 5:
         index1 = 0
@@ -145,9 +145,22 @@ def calcul_moyenne(notes):
             angNote += (note / sur) * 20 * coef
             angCoef += coef
             index1 += 1
-        ang[index] = angNote / angCoef if angCoef else 0
+        ang[index] = (angNote / angCoef) * coefsSpe[index] if angCoef else 0
         index += 1
-
+     index = 0
+    while index < 5:
+        index1 = 0
+        espCoef = 0
+        espNote = 0
+        while index1 < len(esp[index]):
+            note,sur,coef = esp[index][index1][0],esp[index][index1][1],esp[index][index1][2]
+            espNote += (note / sur) * 20 * coef
+            espCoef += coef
+            index1 += 1
+        esp[index] = (espNote / espCoef) * coefsSpe[index] if espCoef else 0
+        index += 1
+    total_pondere += esp[1] + esp[2] + esp[3] + esp[4] + esp[0] + ang[1] + ang[2] + ang[3] + ang[4] + ang[0]
+    total_coef += 2
     return total_pondere / total_coef if total_coef else 0
 
 
