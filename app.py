@@ -99,6 +99,7 @@ def boucleWhile(demande):
             donnee = demande[1]
             donnee = donnee[index]
             note = donnee[3] / donnee[4]
+            note *= 20
             notes += note
             coefs += donnee[5]
             index += 1
@@ -131,13 +132,13 @@ def calcul_moyenne(notes):
                     esp[4].append([note,sur,coef])
             else:
                 if autre == "EE":
-                    ang[0].append([note,sur,coef]
+                    ang[0].append([note,sur,coef])
                 if autre == "CE":
                     ang[1].append([note,sur,coef])
                 if autre == "CO":
-                    ang[2].append([note,sur,coef]
+                    ang[2].append([note,sur,coef])
                 if autre == "EOC":
-                    ang[3].append([note,sur,coef]
+                    ang[3].append([note,sur,coef])
                 if autre == "EOI":
                     ang[4].append([note,sur,coef])
         else:
