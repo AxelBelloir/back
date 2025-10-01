@@ -147,7 +147,7 @@ def calcul_moyenne(notes):
             index1 += 1
         ang[index] = (angNote / angCoef) * coefsSpe[index] if angCoef else 0
         index += 1
-     index = 0
+    index = 0
     while index < 5:
         index1 = 0
         espCoef = 0
