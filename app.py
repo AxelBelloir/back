@@ -148,9 +148,15 @@ def calcul_moyenne(notes):
     index = 0
     ang1 = []
     while index < 4:
-        demande = [0,ang[index],]
+        demande = [0,ang[index]]
         result = boucleWhile(demande)
         ang1.append(result)
+        index += 1
+    esp1 = []
+    while index < 4:
+        demande = [0,esp[index]]
+        result = boucleWhile(demande)
+        esp1.append(result)
         index += 1
     if total_coef == 0:
         return 0
