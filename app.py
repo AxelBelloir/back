@@ -160,7 +160,18 @@ def calcul_moyenne(notes):
         esp[index] = (espNote / espCoef) * coefsSpe[index] if espCoef else 0
         index += 1
     total_pondere += esp[1] + esp[2] + esp[3] + esp[4] + esp[0] + ang[1] + ang[2] + ang[3] + ang[4] + ang[0]
-    total_coef += 2
+    index = 0
+    while index < 5:
+        moyenneT = ang[index]
+        if moyenneT != 0:
+            total_coef += coefsSpe[index]
+        index += 1
+    index = 0
+    while index < 5:
+        moyenneT = esp[index]
+        if moyenneT != 0:
+            total_coef += coefsSpe[index]
+        index += 1
     return total_pondere / total_coef if total_coef else 0
 
 
