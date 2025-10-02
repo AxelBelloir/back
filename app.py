@@ -35,7 +35,7 @@ def acces_compte(demande):
     if action == 0:
         if identifiant == "Zecejy39" and mot_de_passe == "Zecejy39#college#axel":
             conn.close()
-            return ["Bienvenue admin", "admin"]
+            return ["Bienvenue admin", "Admin"]
 
         cursor.execute("SELECT * FROM compte WHERE id = %s AND mp = %s", (identifiant, mot_de_passe))
         compte = cursor.fetchone()
