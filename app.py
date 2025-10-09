@@ -58,6 +58,11 @@ def acces_compte(demande):
             conn.commit()
             conn.close()
             return ["Compte créé.", identifiant]
+    elif action == 2:
+        cursor.execute("SELECT * FROM compte")
+        return1 = cursor.fetchall()
+        conn.close()
+        return return1
 
 
 # === GESTION DES NOTES ===
@@ -179,6 +184,15 @@ def calcul_moyenne(notes):
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/api/requeteadmin', methods=['POST'])
+def requeteadmin():
+    data = request.get_json()
+    action = data.get('action')
+
+    if action == 0:
+        action = 2
+        
+        return jsonify({'message': 'Note ajoutée.'})
 
 @app.route('/api/notes', methods=['POST'])
 def notes():
