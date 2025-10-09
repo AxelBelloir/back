@@ -191,8 +191,9 @@ def requeteadmin():
 
     if action == 0:
         action = 2
-        
-        return jsonify({'message': 'Note ajoutée.'})
+        demande = [action]
+        value = acces_compte(demande)
+        return jsonify({'value': value})
 
 @app.route('/api/notes', methods=['POST'])
 def notes():
